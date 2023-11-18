@@ -28,7 +28,8 @@ done
 mkdir -p "$output_folder"
 
 # Create the HTML file structure with CSS styling for a grid
-echo "<html>
+cat <<EOF > "${output_folder}/${html_file}"
+<html>
 <head>
   <title>Screenshot and Web Information</title>
   <style>
@@ -45,7 +46,8 @@ echo "<html>
     }
   </style>
 </head>
-<body>" > "${output_folder}/${html_file}"
+<body>
+EOF
 
 # Create the screenshots folder
 mkdir -p "${output_folder}/${screenshots_folder}"
@@ -65,21 +67,24 @@ while read -r url; do
   title=$(chromium --headless --disable-gpu --dump-dom "$url" | grep -oP '<title>\K.*?(?=<\/title>)')
 
   # Append information to the HTML file in a box
-  echo "<div class='screenshot-box'>
-    <h2>$title</h2>
-    <p><strong>HTTP Status Code:</strong> $http_code</p>
-    <img src='${filename}.png' alt='Screenshot for $url' />
-  </div><hr>" >> "${output_folder}/${html_file}"
+	cat <<EOL >> "${output_folder}/${html_file}"
+  	<div class='screenshot-box'>
+   	 <h2><a href='$url' target='_blank'>$title</a></h2>
+   	 <p><strong>HTTP Status Code:</strong> $http_code</p>
+   	 <img src='${filename}.png' alt='Screenshot for $url' />
+  	</div><hr>
+EOL
 
   # Notify user
   echo "Information captured for $url."
 done
 
 # Close the HTML file
-echo "</body>
-</html>" >> "${output_folder}/${html_file}"
+cat <<EOF >> "${output_folder}/${html_file}"
+</body>
+</html>
+EOF
 
 # Notify user
 echo "HTML file generated: ${output_folder}/${html_file}"
 echo "Screenshots saved in: ${output_folder}/${screenshots_folder}"
-
