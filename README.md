@@ -1,6 +1,6 @@
 # urlscreenshoter
 
-a nice tool I made to help me look through urls faster. note the tool requires chromium and curl 
+a nice tool I made to help me look through urls faster. note the tool requires chromium
 
 to install just git clone https://DiyTechgenius/urlscreenshoter
 
